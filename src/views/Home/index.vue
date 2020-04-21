@@ -52,5 +52,22 @@ export default {
       background-size: 100%;
     }
   }
+  // .swiper-container {
+  //   position: relative;
+  //   overflow: hidden;
+  //   height: 180px;
+  //   .swiper-wrapper {
+  //     position: relative;
+  //     width: 100%;
+  //     height: 100%;
+  //     display: flex;
+  //     box-sizing: content-box;
+  //     .swiper-slide {
+  //       width: 100%;
+  //       height: 100%;
+
+  //     }
+  //   }
+  // }
 }
 </style>
