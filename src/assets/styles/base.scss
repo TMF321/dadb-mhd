@@ -48,6 +48,45 @@ table {
 }
 
 // =================
-html, body, #app {
-	height: 100%;
-}
+body {
+	font-size: 16px;
+  }
+  html,
+  body,
+  #app {
+	  // 这里的px单位不希望被转化成rem
+	  // 只需要将 px => PX
+	max-width: 540PX;
+	  height: 100%;
+	  margin: auto;
+  }
+  a:active,
+  a:hover,
+  a:link,
+  a:visited {
+	outline: none;
+	text-decoration: none;
+	color: #333;
+  }
+  .font-20 {
+	font-size: 10px;
+  }
+  .font-24 {
+	font-size: 12px;
+  }
+  .font-26 {
+	font-size: 13px;
+  }
+  .font-28 {
+	font-size: 14px;
+  }
+  .font-30 {
+	font-size: 15px;
+  }
+  .font-32 {
+	font-size: 16px;
+  }
+  .font-36 {
+	font-size: 18px;
+  }
+  

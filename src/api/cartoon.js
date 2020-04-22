@@ -9,7 +9,7 @@ import request from '@/utils/request'
 export const getBanner = () => {
   // return 的是 接口调用之后， axios 返回的 Promise 对象
   return request({
-    url: '/api/comic-v2/getproad',
+    url: '/api/comic_v2/getproad',
     method: 'GET',
     // 需求请求体参数，就是提供 data
     // 需求查询字符串参数，就提供 params
@@ -18,6 +18,25 @@ export const getBanner = () => {
       appversion: '1.0',
       channel: 'web-app',
       adgroupid: 123
+    }
+  })
+}
+
+/**
+ * 获取首页推荐数据
+ */
+export const getIndexRecommend = () => {
+  // return 的是 接口调用之后， axios 返回的 Promise 对象
+  return request({
+    url: '/api/comic_v2/customerview',
+    method: 'GET',
+    // 需求请求体参数，就是提供 data
+    // 需求查询字符串参数，就提供 params
+    params: {
+      apptype: 8,
+      appversion: '1.0',
+      channel: 'web-app',
+      viewtype: 1
     }
   })
 }

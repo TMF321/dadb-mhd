@@ -1,24 +1,17 @@
 <template>
   <div class="page-home">
-    <!-- 首页头部 begin -->
-    <header class="index-header">
-      <a href="mine.html?cpid=0">
-        <div class="header-user">
-          <div class="user-btn"></div>
-        </div>
-      </a>
-      <div class="header-logo"></div>
-      <a href="search.html?cpid=0">
-        <div class="header-search"></div>
-      </a>
-    </header>
-    <!-- 首页头部 end -->
+    <index-header></index-header>
+    <div>
+      <Swiper class="my-swiper" @change="onChange" v-if="bannerList.length > 0">
+        <SwiperItem v-for="item in bannerList" :key="item.id">
+          <img :src="item.imageurl" alt />
+        </SwiperItem>
+      </Swiper>
 
-    <Swiper class="my-swiper" @change="onChange" v-if="bannerList.length > 0">
-      <SwiperItem v-for="item in bannerList" :key="item.id">
-        <img :src="item.imageurl" alt />
-      </SwiperItem>
-    </Swiper>
+      <index-nav></index-nav>
+
+      <index-recommend v-for="item in recommendList" :key="item.specialid" :info="item"></index-recommend>
+    </div>
   </div>
 </template>
 
@@ -29,13 +22,19 @@
 // import SwiperItem from '@/components/Swiper/SwiperItem.vue'
 // =>
 import { Swiper, SwiperItem } from '@/components/Swiper'
-import { getBanner } from '@/api/cartoon'
+import IndexNav from './components/IndexNav'
+import IndexRecommend from './components/IndexRecommend'
+import IndexHeader from './components/IndexHeader'
+import { getBanner, getIndexRecommend } from '@/api/cartoon'
 export default {
   name: 'Home',
 
   components: {
     Swiper,
-    SwiperItem
+    SwiperItem,
+    IndexNav,
+    IndexRecommend,
+    IndexHeader
   },
 
   data () {
@@ -43,34 +42,56 @@ export default {
       // 需要一个数据，考虑哪些点？
       // 1.数据放在哪里，data？ props？ computed？ state？ getter？
       // 2.数据格式，string? object? number? array? ....
-      bannerList: []
+      bannerList: [],
+
+      recommendList: []
     }
   },
 
   methods: {
     onChange (index) {
       console.log('hello', index)
+    },
+
+    getBanner () {
+      getBanner()
+        .then(res => {
+          // 漫画岛项目每个接口都有 code 字段
+          // 这个字段如何是200. 这个接口才是ok的
+          if (res.code === 200) {
+            // OK
+            this.bannerList = res.info
+          } else {
+            // 不OK，就报错
+            // TODO， 目前先使用丑陋的 alert 。 后面可以去用一下 vant 组件库中的组件
+            alert(res.code_msg)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          alert('网络异常，请稍后重试')
+        })
+    },
+
+    getIndexRecommend () {
+      getIndexRecommend()
+        .then(res => {
+          if (res.code === 200) {
+            this.recommendList = res.info
+          } else {
+            alert(res.code_msg)
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          alert('网络异常，请稍后重试')
+        })
     }
   },
 
   created () {
-    getBanner()
-      .then(res => {
-        // 漫画岛项目每个接口都有 code 字段
-        // 这个字段如何是200. 这个接口才是ok的
-        if (res.code === 200) {
-          // OK
-          this.bannerList = res.info
-        } else {
-          // 不OK，就报错
-          // TODO， 目前先使用丑陋的 alert 。 后面可以去用一下 vant 组件库中的组件
-          alert(res.code_msg)
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        alert('网络异常，请稍后重试')
-      })
+    this.getBanner()
+    this.getIndexRecommend()
   }
 }
 </script>
@@ -80,39 +101,16 @@ export default {
 // @import "../../assets/style/mixins.scss";
 // 使用 @ 别名时，需要加一个 ~ 符号
 // !!!! @vue/cli 4.3.1 不需要加 ~
-@import "@/assets/style/mixins.scss";
+@import "@/assets/styles/mixins.scss";
 
 .page-home {
   display: flex;
   flex-direction: column;
   height: 100%;
 
-  .index-header {
-    @include border-bottom;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    height: 44px;
-    box-sizing: content-box;
-    .user-btn {
-      width: 25px;
-      height: 25px;
-      background: url("../../assets/icon/user-btn.png") no-repeat;
-      background-size: 100%;
-    }
-    .header-logo {
-      width: 92px;
-      height: 28px;
-      background: url("../../assets/logo.png") no-repeat;
-      background-size: 100%;
-    }
-    .header-search {
-      width: 25px;
-      height: 25px;
-      background: url("../../assets/icon/search.png") no-repeat;
-      background-size: 100%;
-    }
+  .index-main {
+    flex: 1;
+    overflow-y: auto;
   }
 
   .my-swiper img {
