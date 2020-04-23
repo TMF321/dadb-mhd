@@ -5,7 +5,7 @@
     <header-type :types="types" @click="onTypeChange"></header-type>
 
     <div class="ranking-main">
-      <cartoon-list :list="list"></cartoon-list>
+      <cartoon-list :list="cartoonList" isRanking></cartoon-list>
     </div>
   </div>
 </template>
@@ -39,26 +39,32 @@ export default {
         { id: 6, description: '免费榜', ranktype: 3 }
       ],
 
-      list: []
+      rankList: []
+    }
+  },
+
+  computed: {
+    cartoonList () {
+      // [{bigbook_id, bigbook_name, }] => [{id, name}]
+      return this.rankList.map(item => {
+        return {
+          id: item.bigbookid,
+          coverurl: item.coverurl,
+          name: item.name,
+          author: item.author,
+          view: item.weekhits
+        }
+      })
     }
   },
 
   methods: {
     getRankList (ranktype) {
-      getRankList(ranktype)
-        .then(res => {
-          if (res.code === 200) {
-            // res.info 解密 JSON.parse 解析
-            const info = JSON.parse(unformat(res.info))
-            this.list = info.ranklist
-          } else {
-            alert(res.code_msg)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          alert('网络异常，请稍后重试')
-        })
+      getRankList(ranktype).then(res => {
+        // res.info 解密 JSON.parse 解析
+        const info = JSON.parse(unformat(res.info))
+        this.rankList = info.ranklist
+      })
     },
 
     /**

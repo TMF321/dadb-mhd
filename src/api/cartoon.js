@@ -104,3 +104,19 @@ export const getRankList = (ranktype, pageno = 1, pagesize = 20) => {
     })
   })
 }
+
+/**
+ * 获取 VIP专区 数据
+ */
+export const getVIPList = () => {
+  return request({
+    url:
+      '/api/comic_v2/comicsfilterlist_v2?apptype=8&appversion=1.0&channel=web-app',
+    method: 'POST',
+    data: format({
+      pageno: 1,
+      pagesize: 20,
+      special: 892
+    })
+  })
+}
