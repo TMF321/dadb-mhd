@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 
 import Home from '../views/Home'
 import Classify from '../views/Classify'
@@ -13,6 +14,7 @@ import Register from '../views/Register'
 import Search from '../views/Search'
 import SearchResult from '../views/SearchResult'
 import Vip from '../views/Vip'
+import City from '../views/City'
 
 Vue.use(VueRouter)
 
@@ -25,6 +27,10 @@ const router = new VueRouter({
     {
       path: '/classify',
       component: Classify
+    },
+    {
+      path: '/city',
+      component: City
     },
     {
       path: '/hello',
@@ -77,6 +83,18 @@ const router = new VueRouter({
       redirect: '/home'
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  // 判断当前是否选择了城市，根据 sessionStoage 或者 store 去判断
+  // console.log(to, from)
+  // console.log(store)
+  if (!store.state.city.curCity && to.path !== '/city') {
+    // 先去城市列表页面
+    next('/city')
+  } else {
+    next()
+  }
 })
 
 export default router
