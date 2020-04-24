@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 100px;
+      height: 100px;
+      background: pink;
+    }
+
+    .a-enter, .a-leave-to {
+      opacity: 0;
+    }
+    .a-enter-active, .a-leave-active {
+      transition: all 1s;
+    }
+
+    .b-enter, .b-leave-to {
+      height: 0;
+    }
+    .b-enter-active, .b-leave-active {
+      transition: all 1s;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!--
+      需求： 同一个页面有多个元素需要实现不同的 过渡或动画效果，该如何办?
+
+      方案： 给  transition 组件 设置一个 name 属性。比如 a
+            这时6个自动添加的类名将不再以 v- 开头。而时 a- 开头
+
+     -->
+
+    <button @click="isShow = !isShow">点我切换 box 的显示隐藏</button>
+
+    <div style="display: flex; justify-content: space-between;">
+      <transition name="a">
+        <div class="box" v-if="isShow"></div>
+      </transition>
+
+      <transition name="b">
+        <div class="box" v-if="isShow"></div>
+      </transition>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+
+      data: {
+        isShow: true
+      }
+    })
+  </script>
+</body>
+</html>

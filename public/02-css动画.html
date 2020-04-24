@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 100px;
+      height: 100px;
+      background: pink;
+    }
+
+    /* 定义离开时的关键帧动画 */
+    @keyframes leave {
+      0% {
+        transform: scale(1.5);
+      }
+
+      50% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(0);
+      }
+    }
+
+    .v-leave-active {
+      animation: leave 0.5s;
+    }
+
+    /* 定义进入时的关键帧动画 */
+    @keyframes enter {
+      0% {
+        transform: scale(0);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .v-enter-active {
+      animation: enter 0.5s
+    }
+  </style>
+</head>
+<body>
+
+  <!--
+    transition 内置组件。
+
+    实现 vue 中动画过渡的一些效果
+
+    使用方式：
+      1. 那个元素需要有 进入/离开 的效果
+      2. 给这个元素包裹一个 transition 组件
+      3. 这时 这个元素在 进入/离开 会自动携带一些 css 类
+      4. 给这些 css 类做一些样式控制即可
+
+    自动添加的类名有：
+      v-enter
+      v-enter-to
+      v-enter-active
+      v-leave
+      v-leave-to
+      v-leave-active
+   -->
+  <div id="app">
+
+    <button @click="isShow = !isShow">点我切换 box 的显示隐藏</button>
+
+    <transition>
+      <div class="box" v-if="isShow"></div>
+    </transition>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+
+      data: {
+        isShow: true
+      }
+    })
+  </script>
+</body>
+</html>

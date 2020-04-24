@@ -37,15 +37,24 @@ const router = new VueRouter({
   routes: [
     {
       path: '/home',
-      component: Home
+      component: Home,
+      meta: { enterActiveClass: '', leaveActiveClass: 'animated dealy-1s' }
     },
     {
       path: '/classify',
-      component: Classify
+      component: Classify,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/city',
-      component: City
+      component: City,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/hello',
@@ -63,35 +72,67 @@ const router = new VueRouter({
           path: '',
           redirect: '/hello/favorite'
         }
-      ]
+      ],
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/login',
-      component: Login
+      component: Login,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/my',
-      component: My
+      component: My,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/ranking',
-      component: Ranking
+      component: Ranking,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/register',
-      component: Register
+      component: Register,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/search',
-      component: Search
+      component: Search,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/search-result',
-      component: SearchResult
+      component: SearchResult,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/vip',
-      component: Vip
+      component: Vip,
+      meta: {
+        enterActiveClass: 'animated slideInRight',
+        leaveActiveClass: 'animated slideOutRight'
+      }
     },
     {
       path: '/',

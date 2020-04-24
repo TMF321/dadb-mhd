@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
+    />
+    <style>
+      .box {
+        width: 100px;
+        height: 100px;
+        background: pink;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <!--
+      使用自定义类名来结合第三方的css动画库。快速实现动画效果
+
+      css动画库： animate.css
+
+            类似 iconfont 一样，必须要先有一个 animated 类。然后再加上 动画名字的类
+
+            <i class="iconfont icon-home"></i>
+            <div class="animated bounce"></div>
+     -->
+
+      <button @click="isShow = !isShow">点我切换 box 的显示隐藏</button>
+
+      <!-- 普通的div用上animate.css -->
+      <div class="box animated infinite shake"></div>
+
+      <div style="display: flex; justify-content: space-between;">
+        <transition
+          appear
+          leave-active-class="animated slower fadeOut"
+          enter-active-class="animated slower fadeIn"
+        >
+          <div class="box" v-if="isShow"></div>
+        </transition>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+
+        data: {
+          isShow: true,
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"
+    />
+    <style>
+      /* ul {
+        position: absolute;
+      }
+
+      p {
+        position: absolute;
+        z-index: 9999;
+        background-color: red;
+      } */
+    </style>
+  </head>
+
+  <body>
+    <!--
+    多元素过渡，指的是，一个 transition 组件包裹住多个元素，但是只渲染一个
+
+    注意。
+      1. 多元素时要给这些元素设置一个唯一的key。不然会出现一些小bug
+      2. 多元素时是同时应用动画或过度效果的。可能不喜欢这种操作。这时可以设置 transition 组件
+        的 mode 属性
+        mode 属性，叫做 过渡的模式。主要有两个值
+        1. in-out   先进后出
+        2. out-in   先出后进
+
+   -->
+
+    <div id="app">
+      <div style="width: 300px; margin: 20px auto;">
+        <!-- 下面的动画效果实现不了，原因是 vue 底层将这两个 button 给复用了 -->
+        <!-- <transition enter-active-class="animated slideInRight" leave-active-class="animated slideOutLeft">
+        <button v-if="isOn" @click="isOn = false">on</button>
+        <button v-else @click="isOn = true">off</button>
+      </transition> -->
+
+        <!-- 解决方案就是将元素加上不通过的 key 值就好 -->
+
+        <transition
+          mode="in-out"
+          enter-active-class="animated slideInRight"
+          leave-active-class="animated slideOutLeft"
+        >
+          <button key="a" v-if="isOn" @click="isOn = false">on</button>
+          <button key="b" v-else @click="isOn = true">off</button>
+        </transition>
+
+        <hr />
+
+        <transition
+          mode="out-in"
+          enter-active-class="animated slideInRight"
+          leave-active-class="animated slideOutLeft"
+        >
+          <button key="a" v-if="isOn" @click="isOn = false">on</button>
+          <button key="b" v-else @click="isOn = true">off</button>
+        </transition>
+
+        <hr />
+
+        <button @click="fruits = []">清空</button>
+
+        <transition
+          enter-active-class="animated slideInRight"
+          leave-active-class="animated slideOutLeft"
+        >
+          <ul v-if="fruits.length > 0">
+            <li v-for="item in fruits" :key="item">{{ item }}</li>
+          </ul>
+
+          <p v-else>暂未数据</p>
+        </transition>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+
+        data: {
+          isOn: true,
+
+          fruits: ["Apple", "Banana", "Orange"],
+        },
+      });
+    </script>
+  </body>
+</html>

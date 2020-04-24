@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 100px;
+      height: 100px;
+      background: pink;
+    }
+
+    .a-enter, .a-leave-to {
+      opacity: 0;
+    }
+    .a-enter-active, .a-leave-active {
+      transition: all 1s;
+    }
+
+    .b-enter, .b-leave-to {
+      height: 0;
+    }
+    .b-enter-active, .b-leave-active {
+      transition: all 1s;
+    }
+
+    .a, .b {
+      width: 0;
+    }
+    .aa, .bb {
+      transition: all 1s;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!--
+      6个类名，还可以通过 设置 transition 组件的下列 prop 来修改默认的类名
+
+      1. enter-class        默认值是 v-enter
+      2. enter-to-class     默认值是 v-enter-to
+      3. enter-active-class 默认值是 v-enter-active
+
+      1. leave-class        默认值是 v-leave
+      2. leave-to-class     默认值是 v-leave-to
+      3. leave-active-class 默认值是 v-leave-active
+
+     -->
+
+    <button @click="isShow = !isShow">点我切换 box 的显示隐藏</button>
+
+    <div style="display: flex; justify-content: space-between;">
+      <transition name="a">
+        <div class="box" v-if="isShow"></div>
+      </transition>
+
+      <transition name="b">
+        <div class="box" v-if="isShow"></div>
+      </transition>
+
+      <!--
+        v-enter     => a
+        v-leave-to  => b
+        v-enter-active => aa
+        v-leave-active => bb
+       -->
+      <transition enter-class="a" leave-to-class="b" enter-active-class="aa" leave-active-class="bb">
+        <div class="box" v-if="isShow"></div>
+      </transition>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+
+      data: {
+        isShow: true
+      }
+    })
+  </script>
+</body>
+</html>
