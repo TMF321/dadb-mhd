@@ -4,20 +4,23 @@
 
     <div class="city-main">
       <div class="left" ref="scrollLeft">
-        <div
-          class="city-index-section"
-          :ref="`section-${item.py}`"
-          v-for="item in cityList"
-          :key="item.py"
-        >
-          <p>{{ item.py }}</p>
-          <ul>
-            <li
-              v-for="city in item.list"
-              :key="city.cityId"
-              @click="SET_CURCITY(city)"
-            >{{ city.name }}</li>
-          </ul>
+        <!-- .left 元素是 better-scroll 的容器，这个容器的第一个子元素才是内容 -->
+        <div>
+          <div
+            class="city-index-section"
+            :ref="`section-${item.py}`"
+            v-for="item in cityList"
+            :key="item.py"
+          >
+            <p>{{ item.py }}</p>
+            <ul>
+              <li
+                v-for="city in item.list"
+                :key="city.cityId"
+                @click="handleClick(city)"
+              >{{ city.name }}</li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="right">
@@ -31,8 +34,8 @@
 
 <script>
 import NormalHeader from '../../components/NormalHeader'
-import { mapMutations, mapGetters } from 'vuex'
-import { getCityList } from '@/api/city'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
+import BScroll from 'better-scroll'
 
 export default {
   name: 'City',
@@ -41,79 +44,47 @@ export default {
     NormalHeader
   },
 
-  data () {
-    return {
-      cities: []
-    }
-  },
-
   computed: {
-    ...mapGetters('city', ['curCityName']),
-
-    cityList () {
-      // 最终结果收集
-      const result = []
-      this.cities.forEach(item => {
-        // 获取当前城市的首字母
-        const py = item.pinyin.substr(0, 1).toUpperCase()
-
-        // 判断 当前py是否已经在result中存在，如果存在这个py在result中的下标是多少
-        const index = result.findIndex(item => item.py === py)
-        if (index > -1) {
-          // 存在
-          result[index].list.push(item)
-        } else {
-          // 不存在
-          result.push({
-            py,
-            list: [item]
-          })
-        }
-        // 1. [{ py: 'B', list: [北京-item] }]
-        // 2. 保定 [{ py: 'B', list: [北京item] }, { py: 'B', list: [保定-item]}]
-        // 想要 [{ py: 'B', list: [北京-item, 保定-item] }]
-      })
-      return result.sort((a, b) => {
-        return a.py.charCodeAt() - b.py.charCodeAt()
-      })
-    },
-
-    indexs () {
-      return this.cityList.map(item => item.py)
-    }
+    ...mapGetters('city', ['curCityName', 'cityList', 'indexs'])
   },
-  methods: {
-    ...mapMutations('city', ['SET_CURCITY']),
 
-    getCityList () {
-      getCityList()
-        .then(res => {
-          const data = res.data
-          if (data.status === 0) {
-            this.cities = data.data.cities
-          } else {
-            alert(data.msg)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          alert('网络异常，请稍后重试')
-        })
-    },
+  methods: {
+    ...mapActions('city', ['GET_CITIES']),
+    ...mapMutations('city', ['SET_CURCITY']),
 
     handleIndex (py) {
       // ref标记时，如果是标记在v-for上。那么得到的是一个数组
       // 根据py获取左侧对应的元素的dom对象
-      const targetEl = this.$refs[`section-${py}`][0]
+      // const targetEl = this.$refs[`section-${py}`][0]
       // 计算这个元素距离，左侧顶部的距离
-      const offsetTop = targetEl.offsetTop
+      // const offsetTop = targetEl.offsetTop
       // 修改左侧滚动元素的 scrollTop 属性的值
-      this.$refs.scrollLeft.scrollTop = offsetTop
+      // this.$refs.scrollLeft.scrollTop = offsetTop
+      const targetEl = this.$refs[`section-${py}`][0]
+      const offsetTop = targetEl.offsetTop
+      // 调用BScroll实例的 scrollTo 方法
+      this.bscroll.scrollTo(0, -offsetTop)
+    },
+
+    handleClick (city) {
+      // 改变仓库
+      this.SET_CURCITY(city)
+      // 回到之前要去的页面
+      const redirect = this.$route.query.redirect || '/'
+      this.$router.replace(redirect)
     }
   },
 
   created () {
-    this.getCityList()
+    this.GET_CITIES()
+  },
+
+  mounted () {
+    /* eslint-disable */
+    this.bscroll = new BScroll(this.$refs.scrollLeft, {
+      click: true
+    });
+    /* eslint-enable */
   }
 }
 </script>
@@ -135,7 +106,6 @@ export default {
   .left {
     flex: 1;
     height: 100%;
-    overflow-y: auto;
     position: relative;
     .city-index-section {
       @include border-bottom;
