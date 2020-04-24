@@ -1,5 +1,7 @@
 <template>
   <div class="page-home">
+    <router-link to="/city">当前选择的城市是：{{ curCityName }}</router-link>
+
     <index-header></index-header>
     <div>
       <Swiper class="my-swiper" @change="onChange" v-if="bannerList.length > 0">
@@ -26,6 +28,7 @@ import IndexNav from './components/IndexNav'
 import IndexRecommend from './components/IndexRecommend'
 import IndexHeader from './components/IndexHeader'
 import { getBanner, getIndexRecommend } from '@/api/cartoon'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Home',
 
@@ -48,6 +51,10 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters('city', ['curCityName'])
+  },
+
   methods: {
     onChange (index) {
       console.log('hello', index)
@@ -58,33 +65,15 @@ export default {
         .then(res => {
           // 漫画岛项目每个接口都有 code 字段
           // 这个字段如何是200. 这个接口才是ok的
-          if (res.code === 200) {
-            // OK
-            this.bannerList = res.info
-          } else {
-            // 不OK，就报错
-            // TODO， 目前先使用丑陋的 alert 。 后面可以去用一下 vant 组件库中的组件
-            alert(res.code_msg)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          alert('网络异常，请稍后重试')
+          // OK
+          this.bannerList = res.info
         })
     },
 
     getIndexRecommend () {
       getIndexRecommend()
         .then(res => {
-          if (res.code === 200) {
-            this.recommendList = res.info
-          } else {
-            alert(res.code_msg)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          alert('网络异常，请稍后重试')
+          this.recommendList = res.info
         })
     }
   },

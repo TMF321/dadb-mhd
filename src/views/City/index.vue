@@ -51,6 +51,7 @@ export default {
     ...mapGetters('city', ['curCityName']),
 
     cityList () {
+      // 最终结果收集
       const result = []
       this.cities.forEach(item => {
         // 获取当前城市的首字母
